@@ -1,10 +1,23 @@
-from data_load import load
 import nltk
-# nltk.download('stopwords') RUN ONCE
 import string
 from nltk.stem import PorterStemmer, WordNetLemmatizer
-# nltk.download('wordnet')
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('punkt')
 
+def preprocess(df):
+    df['edited'] = df['body']
+    # df['edited'] = df['description']
+    # ~30 seconds
+    df['edited'] = df['edited'].map(lambda x: normalize(x))
+    # ~30 seconds
+    df['edited'] = df['edited'].map(lambda x: nltk.word_tokenize(x))
+    # ~ 30 seconds
+    df['edited'] = df['edited'].map(lambda x: lemmatization(x))
+
+    df['edited'] = df['edited'].map(lambda x: ' '.join(word for word in x))
+
+    return df
 
 def normalize(text):
     text = text.lower()
@@ -18,9 +31,11 @@ def normalize(text):
 
 def remove_stopwords(text):
     stopwords = nltk.corpus.stopwords.words('english')
-    for word in stopwords:
-        text.replace(word, '')
-    return text
+    new_string = []
+    for word in text.split():
+        if word not in stopwords:
+            new_string.append(word)
+    return ' '.join(new_string)
 
 
 def remove_punctuation(text):
@@ -31,29 +46,13 @@ def remove_punctuation(text):
 def remove_short_words(text):
     return ' '.join(word for word in text.split() if len(word) > 3)
 
+def lemmatization(words):
+    lm = WordNetLemmatizer()
+    return [lm.lemmatize(word) for word in words]
+
+# ===== Not used in preprocess =====
 def stemming(words):
     ps = PorterStemmer()
     return [ps.stem(word) for word in words]
 
-def lemmatization (words):
-    lm = WordNetLemmatizer()
-    return [lm.lemmatize(word) for word in words]
 
-
-df = load('articles/')
-df['edited'] = df['body']
-
-# ~30 seconds
-df['edited'] = df['edited'].map(lambda x: normalize(x))
-
-# ~30 seconds
-df['edited'] = df['edited'].map(lambda x: nltk.word_tokenize(x))
-
-# TODO: Pick either stemming or lemmatization
-# ~150 seconds
-df['edited'] = df['edited'].map(lambda x: stemming(x))
-# ~ 30 seconds
-df['edited'] = df['edited'].map(lambda x: lemmatization(x))
-
-
-print(df['edited'][0])
