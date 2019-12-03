@@ -1,13 +1,3 @@
-from thaad_cluster import thaad
-thaad = thaad()
-
-import spacy
-nlp = spacy.load("en_core_web_lg")
-ents = thaad['edited'].apply(lambda x: list(nlp(x).ents))
-
-from tfidf import tfidf
-vectors = tfidf(ents)
-
 from collections import Counter
 from sklearn.cluster import DBSCAN
 import numpy as np
