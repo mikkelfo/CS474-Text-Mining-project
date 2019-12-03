@@ -3,7 +3,7 @@ from sklearn.cluster import DBSCAN
 import numpy as np
 
 # [(0.45, 3), (0.5, 4), (0.45, 5)]
-def try_events(params, vectors):
+def try_events(params, vectors, thaad):
     candidates = []
     for (eps, min_samples) in params:
         clusters = DBSCAN(eps=eps, min_samples=min_samples, metric="cosine").fit(vectors)
