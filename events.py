@@ -41,7 +41,7 @@ def find_title(event):
         sum_[i] /= N - 1
     title_index = sorted(sum_.items(), key=lambda k: k[1], reverse=True)[0][0]
 
-    event_title = event[1].reset_index()['title'].iloc[title_index]
+    event_title = event.reset_index()['title'].iloc[title_index]
 
     return event_title
 
