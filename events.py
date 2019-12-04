@@ -1,11 +1,8 @@
 from collections import Counter
 from sklearn.cluster import DBSCAN
 import numpy as np
-
-# [(0.45, 3), (0.5, 4), (0.45, 5)]
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
 from preprocess import normalize
 
 
