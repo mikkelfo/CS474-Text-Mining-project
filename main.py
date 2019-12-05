@@ -76,3 +76,30 @@ def load_from_files():
     kmeans_2017 = km[20:30]
 
     return dbscan_2015, dbscan_2016, dbscan_2017, kmeans_2015, kmeans_2016, kmeans_2017
+
+
+def load_dbscan():
+    df = load('articles/')
+    df['year'] = df['time'].str[:4]
+    year2015, year2016, year2017 = df[df['year'] == '2015'], df[df['year'] == '2016'], df[df['year'] == '2017']
+
+    with open("dbscan.csv") as f:
+        fr = csv.reader(f)
+        reader = list(fr)
+        cluster_indices = [[int(x) for x in row] for row in reader]
+    db = []
+    for row in cluster_indices[0:10]:
+        row = np.array(row) + 16613
+        db.append(year2015[year2015.index.isin(row)])
+    for row in cluster_indices[10:20]:
+        row = np.array(row) + 9128
+        db.append(year2016[year2016.index.isin(row)])
+    for row in cluster_indices[20:30]:
+        row = np.array(row) + 2
+        db.append(year2017[year2017.index.isin(row)])
+
+    dbscan_2015 = db[0:10]
+    dbscan_2016 = db[10:20]
+    dbscan_2017 = db[20:30]
+
+    return dbscan_2015, dbscan_2016, dbscan_2017

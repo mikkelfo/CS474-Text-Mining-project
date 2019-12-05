@@ -23,6 +23,18 @@ def try_events(params, vectors, thaad):
 
     return candidates
 
+def event_clustering(vectors, df):
+    clusters = DBSCAN(eps=0.5, min_samples=4, metric="cosine").fit(vectors)
+    labels = list(zip(*sorted(Counter(clusters.labels_).items(), key=lambda k: k[1], reverse=True)))[0]
+    events = []
+    for index in labels:
+        if index != -1:
+            indices = list(np.where(clusters.labels_ == index))[0]
+            event = df[df.index.isin(indices)]
+            events.append(event)
+
+    return events
+
 
 # Finds title based on most similar body text
 def find_title(event):
