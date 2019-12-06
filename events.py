@@ -1,30 +1,24 @@
 from collections import Counter
+
+import pandas as pd
 from sklearn.cluster import DBSCAN
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from preprocess import normalize
 
+def extract_entities(df):
+    import spacy
+    nlp = spacy.load("en_core_web_lg")
 
-def try_events(params, vectors, thaad):
-    candidates = []
-    for (eps, min_samples) in params:
-        clusters = DBSCAN(eps=eps, min_samples=min_samples, metric="cosine").fit(vectors)
+    ents = df['edited'].apply(lambda x: list(nlp(x).ents))
 
-        labels = list(zip(*sorted(Counter(clusters.labels_).items(), key=lambda k: k[1], reverse=True)))[0]
-        events = []
-        for index in labels:
-            if index != -1:
-                indices = list(np.where(clusters.labels_ == index))[0]
-                event = thaad[thaad.index.isin(indices)]
-                events.append(event)
+    return ents
 
-        candidates.append(events)
+def clustering(matrix, df):
+    np.random.seed(5)  # For the same results
 
-    return candidates
-
-def event_clustering(vectors, df):
-    clusters = DBSCAN(eps=0.5, min_samples=4, metric="cosine").fit(vectors)
+    clusters = DBSCAN(eps=0.5, min_samples=4, metric="cosine").fit(matrix)
     labels = list(zip(*sorted(Counter(clusters.labels_).items(), key=lambda k: k[1], reverse=True)))[0]
     events = []
     for index in labels:
@@ -35,12 +29,21 @@ def event_clustering(vectors, df):
 
     return events
 
+def group_by_n_date(df, n):
+    df['time'] = pd.to_datetime(pd.to_datetime(df['time']).apply(lambda x: x.date()))
+    freq = str(n)+'D'
+    groups = []
+    for _, grp in df.groupby(pd.Grouper(key="time", freq=freq)):
+        if len(grp) != 0:
+            groups.append(grp)
+
+    return groups
 
 # Finds title based on most similar body text
 def find_title(event):
     titles = event['body'].apply(lambda x: normalize(x))
 
-    titles_vector = TfidfVectorizer(min_df=3, max_df=0.9).fit_transform(titles)
+    titles_vector = TfidfVectorizer().fit_transform(titles)
 
     N = titles_vector.shape[0]
     sum_ = {}
@@ -50,21 +53,46 @@ def find_title(event):
             if i != j:
                 sum_[i] += cosine_similarity(titles_vector[i], titles_vector[j])
     for i in range(N):
-        sum_[i] /= N - 1
+        if N != 1:
+            sum_[i] /= N - 1
     title_index = sorted(sum_.items(), key=lambda k: k[1], reverse=True)[0][0]
 
     event_title = event.reset_index()['title'].iloc[title_index]
 
     return event_title
 
+def sort_by_date(events):
+    timeline = []
+    for event in events:
+        timeline.append((event['time'].iloc[len(event)//2], event))
 
-# Finds the median time
+    timeline = list(zip(*sorted(timeline, key=lambda k: k[0])))[1]
+    return timeline
+
+def construct_timeline(events):
+    timeline = sort_by_date(events)
+    print("Event:")
+    for event in timeline:
+        print(" -> " + find_title(event))
+
+
+def detailed_information(events, ents):
+    timeline = sort_by_date(events)
+
+    for event in timeline:
+        print("Title:        " + find_title(event))
+        print("Time:         " + find_time(event))
+        print("Person:       " + ', '.join(find(event, ents, 'PERSON')))
+        print("Organization: " + ', '.join(find(event, ents, 'ORG')))
+        print("Place:        " + ', '.join(find(event, ents, 'GPE')))
+        print()
+
 def find_time(event):
-    time = event['time'].apply(lambda x: x.split()[0])
-    return time.iloc[len(time) // 2]
+    return event['time'].iloc[len(event)//2].strftime("%Y-%m-%d")
 
 # valid labels include 'PERSON', 'ORG', 'GPE'
-def find(ents, label):
+def find(df, ents, label):
+    ents = ents[df.index]
     items = {}
     for doc in ents:
         for ent in doc:
@@ -74,7 +102,10 @@ def find(ents, label):
                 else:
                     items[ent.text] = 1
 
-    return remove_dupes(list(list(zip(*sorted(items.items(), key = lambda k: k[1], reverse=True)))[0])[:8])
+    if remove_dupes(list(list(zip(*sorted(items.items(), key = lambda k: k[1], reverse=True))))):
+        return remove_dupes(list(list(zip(*sorted(items.items(), key = lambda k: k[1], reverse=True)))[0])[:8])
+    else:
+        return []
 
 
 # Helper functions

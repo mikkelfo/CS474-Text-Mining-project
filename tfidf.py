@@ -1,3 +1,11 @@
+def tokenizer(x):
+    text = []
+    for ent in x:
+        text.append((ent.text.lower(), ent.label_.lower()))
+    return text
+
+
+# Not used
 def tfidf(ents):
     import math
     import pandas as pd
@@ -31,4 +39,4 @@ def tfidf(ents):
 
     vectors = scipy.sparse.csr_matrix(df.values)
 
-    return vectors
+    return df

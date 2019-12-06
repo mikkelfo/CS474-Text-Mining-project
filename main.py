@@ -77,6 +77,26 @@ def load_from_files():
 
     return dbscan_2015, dbscan_2016, dbscan_2017, kmeans_2015, kmeans_2016, kmeans_2017
 
+def write_dbscan():
+    df = load('articles/')
+    df = preprocess(df)
+
+    tfidf = TfidfVectorizer(max_features=1000, min_df=10, max_df=0.9)
+
+    df['year'] = df['time'].str[:4]
+    year2015, year2016, year2017 = df[df['year'] == '2015'], df[df['year'] == '2016'], df[df['year'] == '2017']
+
+    # Resets the files
+    with open("dbscan.csv", "w") as f:
+        pass
+
+    for df_year in [year2015, year2016, year2017]:
+        vectors = tfidf.fit_transform(df_year['edited'])
+
+        clusters = cluster(vectors, method="dbscan")
+        top10 = ranking(df, clusters.labels_)
+        indices(clusters.labels_, top10, "dbscan.csv")
+
 
 def load_dbscan():
     df = load('articles/')
