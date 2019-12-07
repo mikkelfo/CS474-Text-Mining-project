@@ -30,6 +30,7 @@ def clustering(matrix, df):
     return events
 
 def group_by_n_date(df, n):
+    pd.options.mode.chained_assignment = None
     df['time'] = pd.to_datetime(pd.to_datetime(df['time']).apply(lambda x: x.date()))
     freq = str(n)+'D'
     groups = []

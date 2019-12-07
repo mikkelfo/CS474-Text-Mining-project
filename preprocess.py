@@ -1,6 +1,11 @@
 import nltk
 import string
-from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk.stem import WordNetLemmatizer
+import spacy
+from spacy.lang.en.stop_words import STOP_WORDS
+
+nltk.download('averaged_perceptron_tagger')
+nltk.download('wordnet')
 nltk.download('stopwords')
 nltk.download('wordnet')
 nltk.download('punkt')
@@ -50,9 +55,32 @@ def lemmatization(words):
     lm = WordNetLemmatizer()
     return [lm.lemmatize(word) for word in words]
 
-# ===== Not used in preprocess =====
-def stemming(words):
-    ps = PorterStemmer()
-    return [ps.stem(word) for word in words]
+def extract_nouns(text):
+    # stopwords extension
+    import calendar
+    months = [x.lower() for x in calendar.month_name[1:13]]
+    days = [x.lower() for x in calendar.day_name[0:7]]
+    extensions = ['yonhap']
+    stop_words = list(STOP_WORDS) + months + days + extensions
+
+    tokens = nltk.word_tokenize(text)
+    POS = nltk.pos_tag(tokens)
+    lm = WordNetLemmatizer()
+
+    result = ''
+    res = []
+
+    for word, pos in POS:
+        select = ['NNP', 'NN']
+        if pos in select:
+            token = lm.lemmatize(word)
+            token = token.lower()
+            if token not in stop_words:
+                res.append(token)
+                result = ' '.join(res)
+
+    result = remove_punctuation(result)
+
+    return result
 
 
