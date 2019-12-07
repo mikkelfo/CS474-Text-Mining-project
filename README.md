@@ -8,9 +8,11 @@ We've constructed a google colab file that runs through the entirety of our code
 Furthermore, let's explain the main functionality of our files.
 * data_load     - in charge of loading the data from the json files
 * preprocess    - contains main preprocessing functionality
+
 **Issue tracking**<br/>
 * clustering    - clustering and ranking _specifically_ for issue tracking
 * extract_issue - Title extraction of issues and extraction of our 2 issues for detailed analysis
+
 * main          - writing to and loading from .csv files for issues
 **Event tracking**<br/>
 * events        - all event related functionality, such as entity extraction, clustering, timeline, detailed information, etc.
