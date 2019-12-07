@@ -12,8 +12,8 @@ Furthermore, let's explain the main functionality of our files.
 **Issue tracking**<br/>
 * clustering    - clustering and ranking _specifically_ for issue tracking
 * extract_issue - Title extraction of issues and extraction of our 2 issues for detailed analysis
-
 * main          - writing to and loading from .csv files for issues
+
 **Event tracking**<br/>
 * events        - all event related functionality, such as entity extraction, clustering, timeline, detailed information, etc.
 * tfidf         - contains customized entity tokenizer for TfidfVectorizer
