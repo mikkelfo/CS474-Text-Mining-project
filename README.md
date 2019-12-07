@@ -8,7 +8,7 @@ We've used 3 different libraries throughout the project, sci-kit learn, NLTK and
 
 ### [Scikit learn](http://scikit-learn.github.io/stable)
 Sci-kit learn was used throughout the entirety of the project using functionality such as
-#### Vectorization <br/>
+#### Vectorization
 [CountVectorizer(max_features, max_df, ngram_range)](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html)<br/>
 [TfidfVectorizer(max_features, min_df, max_df)](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html)
 
