@@ -1,7 +1,28 @@
 # CS474-Text-Mining-project
 Term project for CS474: Text Mining
 
+## API Documentation for code
+We've constructed a google colab file that runs through the entirety of our code, explaining the steps along the way. 
 [Google colab file for run through](https://colab.research.google.com/drive/1_8h8pZ5A0lb_MiyY5pOwc-F1UaY52IZZ)
+
+Furthermore, let's explain the main functionality of our files.
+* data_load     - in charge of loading the data from the json files
+* preprocess    - contains main preprocessing functionality
+**Issue tracking**<br/>
+* clustering    - clustering and ranking _specifically_ for issue tracking
+* extract_issue - Title extraction of issues and extraction of our 2 issues for detailed analysis
+* main          - writing to and loading from .csv files for issues
+**Event tracking**<br/>
+* events        - all event related functionality, such as entity extraction, clustering, timeline, detailed information, etc.
+* tfidf         - contains customized entity tokenizer for TfidfVectorizer
+
+### Workflow
+More detailed step-by-step can be found in the colab, but to sum up the workflow of our code
+
+Issue-tracking: Load data -> preprocess -> cluster -> extract titles
+
+Event-tracking: Pick 2 issues -> extract entities -> cluster -> group by 3 days -> timeline and detailed information
+
 
 ## API Documentation for libaries used
 We've used 3 different libraries throughout the project, sci-kit learn, NLTK and spaCy.
