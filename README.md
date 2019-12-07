@@ -9,8 +9,8 @@ We've used 3 different libraries throughout the project, sci-kit learn, NLTK and
 ### Sci-kit learn
 Sci-kit learn was used throughout the entirety of the project using functionality such as
 #### Vectorization
-[CountVectorizer(max_features, max_df, ngram_range)](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html) for counting terms <br/>
-[TfidfVectorizer(max_features, min_df, max_df)](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html) for TFIDF matrix
+[CountVectorizer(max_features, max_df, ngram_range)](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html)<br/>
+[TfidfVectorizer(max_features, min_df, max_df)](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html)
 
 #### Clustering
 [DBSCAN(eps, min_samples)](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html)<br/>
