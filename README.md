@@ -2,7 +2,7 @@
 Term project for CS474: Text Mining
 
 ## API Documentation for code
-We've constructed a google colab file that runs through the entirety of our code, explaining the steps along the way. 
+We've constructed a google colab file that runs through the entirety of our code, explaining the steps along the way. <br/>
 [Google colab file for run through](https://colab.research.google.com/drive/1_8h8pZ5A0lb_MiyY5pOwc-F1UaY52IZZ)
 
 Furthermore, let's explain the main functionality of our files.
