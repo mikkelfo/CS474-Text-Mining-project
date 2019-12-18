@@ -1,7 +1,8 @@
-# CS474-Text-Mining-project
-Term project for CS474: Text Mining
+# Team 5's term project for CS474: Text Mining
 
 ## API Documentation for code
+We had problems running clustering algorithms on our computers (memory issues) and therefore switched to google colab. This means that we do not have an executable or main file (our main file consists of write/loading files), but instead a detailed google colab.
+
 We've constructed a google colab file that runs through the entirety of our code, explaining the steps along the way. <br/>
 [Google colab file for run through](https://colab.research.google.com/drive/1_8h8pZ5A0lb_MiyY5pOwc-F1UaY52IZZ)
 
